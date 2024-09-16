@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex items-center justify-center p-4 h-screen">
+  <div class="flex-col flex items-center justify-center p-4 h-screen bg-orange-200">
     <iframe
       src=""
       id="api-frame"
