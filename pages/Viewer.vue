@@ -1,6 +1,10 @@
 <template>
-  <div class="flex-col flex items-center justify-center p-4 h-screen bg-orange-200">
-    <iframe
+      <di v-if="loading">loading....</di>
+      <div
+      v-show="!loading"
+      class="flex-col flex items-center justify-center p-4 h-screen bg-orange-200"
+      >
+      <iframe
       src=""
       id="api-frame"
       ref="iframe"
@@ -9,22 +13,23 @@
       webkitallowfullscreen="true"
       mozallowfullscreen="true"
       allowfullscreen
-    ></iframe>
+      >
+    </iframe>
     <div class="flex justify-around items-center w-9/12 p-2">
       <button
-        @click="setBackground"
-        class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      @click="setBackground"
+      class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
       >
-        Toggle Background
-      </button>
-          <button
-        @click="centerCamera"
-        class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-      >
-        Center Camera
-      </button>
-    </div>
-  </div>
+      Toggle Background
+    </button>
+    <button
+    @click="centerCamera"
+    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+    >
+    Center Camera
+  </button>
+</div>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -53,11 +58,11 @@ const loadModel = async () => {
 
           loadedValue.addEventListener('viewerready', function () {
             if (iframe.value) iframe.value.classList.remove('hidden')
-            resolve() 
+            resolve()
           })
         },
         error: function () {
-          reject('Error loading the viewer') 
+          reject('Error loading the viewer')
         },
         camera: 0,
         blending: 1
@@ -65,7 +70,7 @@ const loadModel = async () => {
     })
   } catch (err) {
     console.log(err)
-    error.value = true
+    err.value = true
   } finally {
     loading.value = false
   }
