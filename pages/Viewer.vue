@@ -1,35 +1,37 @@
 <template>
-      <di v-if="loading">loading....</di>
-      <div
+  <di v-if="loading">loading....</di>
+  <div class="flex bg-orange-200 w-full h-screen justify-around p-4">
+    <div
       v-show="!loading"
-      class="flex-col flex items-center justify-center p-4 h-screen bg-orange-200"
-      >
-      <iframe
-      src=""
-      id="api-frame"
-      ref="iframe"
-      allow="autoplay; fullscreen; xr-spatial-tracking"
-      class="hidden w-9/12 h-full"
-      webkitallowfullscreen="true"
-      mozallowfullscreen="true"
-      allowfullscreen
-      >
-    </iframe>
-    <div class="flex justify-around items-center w-9/12 p-2">
-      <button
-      @click="setBackground"
-      class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-      >
-      Toggle Background
-    </button>
-    <button
-    @click="centerCamera"
-    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      class="flex-col flex items-center justify-center w-10/12"
     >
-    Center Camera
-  </button>
-</div>
-</div>
+      <iframe
+        src=""
+        id="api-frame"
+        ref="iframe"
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        class="hidden w-full h-full"
+        webkitallowfullscreen="true"
+        mozallowfullscreen="true"
+        allowfullscreen
+      >
+      </iframe>
+      <div class="flex justify-around items-center w-9/12 p-2">
+        <ActionButton @click="setBackground"> Toggle Background </ActionButton>
+        <ActionButton @click="centerCamera"> Center Camera </ActionButton>
+        <ActionButton @click="takePhoto"> Capture</ActionButton>
+      </div>
+    </div>
+    <div class="w-100 h-screen w-28">
+      <img
+        v-if="screenshot"
+        width="110"
+        height="100"
+        :src="screenshot"
+        alt=""
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -42,6 +44,7 @@ const uid = '645d2a72d8104da39997a698a4650187' // Sketchfab model
 const loading = ref(true)
 const api = ref<any>(null)
 const isBlack = ref<boolean>(false)
+const screenshot = ref(null)
 
 const loadModel = async () => {
   if (!iframe.value) return
@@ -58,6 +61,7 @@ const loadModel = async () => {
 
           loadedValue.addEventListener('viewerready', function () {
             if (iframe.value) iframe.value.classList.remove('hidden')
+
             resolve()
           })
         },
@@ -91,6 +95,14 @@ const centerCamera = () => {
   api.value.recenterCamera(function (err) {
     if (!err) {
       window.console.log('Camera recentered')
+    }
+  })
+}
+
+const takePhoto = () => {
+  api.value.getScreenShot('image/png', function (err, result) {
+    if (!err) {
+      screenshot.value = result
     }
   })
 }
