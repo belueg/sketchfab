@@ -11,6 +11,7 @@
         details</a
       >
     </p>
+    
     <SketchFabModel></SketchFabModel>
   </div>
 </template>
